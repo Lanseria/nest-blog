@@ -26,15 +26,15 @@ export class UserEntity extends AbstractEntity {
   // TODO: add following
 
   @BeforeInsert()
-  async hashPassword () {
+  async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10)
   }
 
-  async comparePassword (attempt: string) {
+  async comparePassword(attempt: string) {
     return await bcrypt.compare(attempt, this.password)
   }
 
-  toJSON () {
+  toJSON() {
     return classToPlain(this)
   }
 }

@@ -9,7 +9,7 @@ export class UserController {
   ) { }
 
   @Get()
-  findCurrentUser (@User() username: string) {
+  findCurrentUser(@User() username: string) {
     return this.userService.findByUsername(username)
   }
 }
