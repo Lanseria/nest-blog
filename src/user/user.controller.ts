@@ -1,6 +1,9 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards, Body, Put, ValidationPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from 'src/auth/user.decorator';
+import { AuthGuard } from '@nestjs/passport';
+import { UserEntity } from 'src/entities/user.entity';
+import { UpdateUserDTO } from 'src/models/user.model';
 
 @Controller('user')
 export class UserController {
@@ -9,7 +12,17 @@ export class UserController {
   ) { }
 
   @Get()
-  findCurrentUser(@User() username: string) {
+  @UseGuards(AuthGuard())
+  findCurrentUser(@User() { username }: UserEntity) {
     return this.userService.findByUsername(username)
+  }
+
+  @Put()
+  @UseGuards(AuthGuard())
+  update(@User() { username }: UserEntity, @Body(new ValidationPipe({
+    transform: true,
+    whitelist: true
+  })) data: UpdateUserDTO) {
+    return this.userService.updateUser(username, data)
   }
 }

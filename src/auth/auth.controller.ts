@@ -2,7 +2,7 @@ import { Controller, Post, Body, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDTO as RegisterDTO, LoginDTO } from 'src/models/user.model';
 
-@Controller('user')
+@Controller('auth')
 export class AuthController {
 
   constructor(private authService: AuthService) { }
