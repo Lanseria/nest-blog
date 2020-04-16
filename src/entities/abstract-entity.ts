@@ -5,9 +5,9 @@ export abstract class AbstractEntity extends BaseEntity {
   id: number
 
   @CreateDateColumn()
-  created: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
 
-  updated: Date;
+  updatedAt: Date;
 }

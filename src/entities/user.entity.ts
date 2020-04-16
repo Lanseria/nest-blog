@@ -1,8 +1,9 @@
-import { Entity, Column, BeforeInsert, JoinTable, ManyToMany } from "typeorm";
+import { Entity, Column, BeforeInsert, JoinTable, ManyToMany, OneToMany } from "typeorm";
 import * as bcrypt from 'bcryptjs'
 import { Exclude, classToPlain } from 'class-transformer'
 import { IsEmail } from 'class-validator'
 import { AbstractEntity } from "./abstract-entity";
+import { ArticleEntity } from "./article.entity";
 
 @Entity('user')
 export class UserEntity extends AbstractEntity {
@@ -37,14 +38,29 @@ export class UserEntity extends AbstractEntity {
   @Exclude()
   password: string
   /**
+   * TA的文章
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @OneToMany(type => ArticleEntity, article => article.author)
+  articles: ArticleEntity[];
+  /**
+   * TA喜欢的文章
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @ManyToMany(type => ArticleEntity, article => article.favoritedBy)
+  @JoinTable()
+  favorites: ArticleEntity[]
+  /**
    * 粉丝
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   @ManyToMany(type => UserEntity, user => user.followee)
   @JoinTable()
   followers: UserEntity[];
   /**
    * 关注的人
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   @ManyToMany(type => UserEntity, user => user.followers)
   @JoinTable()
   followee: UserEntity[];
@@ -63,12 +79,15 @@ export class UserEntity extends AbstractEntity {
     return await bcrypt.compare(attempt, this.password)
   }
   /**
-   * 转化为正确JSON
+   * 转化为普通JSON
    */
   toJSON() {
     return classToPlain(this)
   }
-
+  /**
+   * 转换为个人资料JSON
+   * @param user 判断验证自己是否关注此人(传入一个用户)
+   */
   toProfile(user?: UserEntity) {
     let following = null
     if (user) {
