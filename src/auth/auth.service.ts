@@ -19,9 +19,7 @@ export class AuthService {
       const payload = { username: user.username }
       const token = this.jwtService.sign(payload)
       return {
-        user: {
-          ...user.toJSON(), token
-        }
+        ...user.toJSON(), token
       }
     } catch (error) {
       if (error.code === '23505') {
@@ -41,10 +39,8 @@ export class AuthService {
       const payload = { username: user.username }
       const token = this.jwtService.sign(payload)
       return {
-        user: {
-          ...user.toJSON(),
-          token
-        }
+        ...user.toJSON(),
+        token
       }
     } catch (error) {
       throw new UnauthorizedException('Invalid credentials')
