@@ -1,8 +1,7 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
-import { UpdateUserDTO } from 'src/models/user.model';
 
 @Injectable()
 export class UserService {
@@ -10,17 +9,12 @@ export class UserService {
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>
   ) { }
 
-  async findByUsername(username: string): Promise<UserEntity> {
+  async findByUsername(username: string, currentUser?: UserEntity): Promise<UserEntity> {
     const user = await this.userRepo.findOne({
       where: { username },
       relations: ['followers']
     })
-    return user.toProfile()
-  }
-
-  async updateUser(username: string, data: UpdateUserDTO) {
-    await this.userRepo.update({ username }, data)
-    return this.findByUsername(username)
+    return user.toProfile(currentUser)
   }
 
   async followUser(currentUser: UserEntity, username: string) {

@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException, UnauthorizedException, ConflictException } from '@nestjs/common';
-import { LoginDTO, RegisterDTO } from 'src/models/user.model';
+import { LoginDTO, RegisterDTO, UpdateUserDTO } from 'src/models/user.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -45,5 +45,20 @@ export class AuthService {
     } catch (error) {
       throw new UnauthorizedException('Invalid credentials')
     }
+  }
+
+  async findCurrentUser(username: string) {
+    const user = await this.userRepo.findOne({ where: { username } })
+    const payload = { username: user.username }
+    const token = this.jwtService.sign(payload)
+    return {
+      ...user.toJSON(),
+      token
+    }
+  }
+
+  async updateUser(username: string, data: UpdateUserDTO) {
+    await this.userRepo.update({ username }, data)
+    return this.findCurrentUser(username)
   }
 }

@@ -11,5 +11,9 @@
     "baseUrl": "./",
     "incremental": true
   },
-  "exclude": ["node_modules", "dist", "pgdata"]
+  "exclude": [
+    "node_modules",
+    "dist/",
+    "pgdata/"
+  ]
 }
