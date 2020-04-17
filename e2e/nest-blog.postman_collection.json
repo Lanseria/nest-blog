@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "0574ad8a-a525-43ae-8e1e-5fd9756037f4",
-		"name": "Conduit",
+		"_postman_id": "39a2bf63-bf8a-4de5-907b-d5ac1c4a50b2",
+		"name": "nest-blog",
 		"description": "Collection for testing the Conduit API\n\nhttps://github.com/gothinkster/realworld",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -216,10 +216,6 @@
 								"value": "Token {{token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/user",
 							"host": [
@@ -288,7 +284,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Articles",
@@ -350,10 +347,6 @@
 								"value": "XMLHttpRequest"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/articles",
 							"host": [
@@ -423,10 +416,6 @@
 								"value": "XMLHttpRequest"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/articles?author=johnjacob",
 							"host": [
@@ -502,10 +491,6 @@
 								"value": "XMLHttpRequest"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/articles?favorited=jane",
 							"host": [
@@ -581,10 +566,6 @@
 								"value": "XMLHttpRequest"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/articles?tag=dragons",
 							"host": [
@@ -603,7 +584,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Articles, Favorite, Comments",
@@ -615,7 +597,6 @@
 							"listen": "test",
 							"script": {
 								"id": "e711dbf8-8065-4ba8-8b74-f1639a7d8208",
-								"type": "text/javascript",
 								"exec": [
 									"var responseJSON = JSON.parse(responseBody);",
 									"",
@@ -640,7 +621,8 @@
 									"tests['Article has \"favoritesCount\" property'] = article.hasOwnProperty('favoritesCount');",
 									"tests['favoritesCount is an integer'] = Number.isInteger(article.favoritesCount);",
 									""
-								]
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -662,7 +644,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"article\":{\"title\":\"How to train your dragon\", \"description\":\"Ever wonder how?\", \"body\":\"Very carefully.\", \"tagList\":[\"dragons\",\"training\"]}}"
+							"raw": "{\n    \"article\": {\n        \"title\": \"How to train your dragon\",\n        \"description\": \"Ever wonder how?\",\n        \"body\": \"Very carefully.\",\n        \"tagList\": [\n            \"dragons\",\n            \"training\"\n        ]\n    }\n}"
 						},
 						"url": {
 							"raw": "{{APIURL}}/articles",
@@ -737,10 +719,6 @@
 								"value": "Token {{token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/articles/feed",
 							"host": [
@@ -815,10 +793,6 @@
 								"value": "Token {{token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/articles",
 							"host": [
@@ -892,10 +866,6 @@
 								"value": "Token {{token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/articles",
 							"host": [
@@ -969,10 +939,6 @@
 								"value": "Token {{token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/articles?author={{USERNAME}}",
 							"host": [
@@ -1052,10 +1018,6 @@
 								"value": "Token {{token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/articles?author={{USERNAME}}",
 							"host": [
@@ -1135,10 +1097,6 @@
 								"value": "Token {{token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/articles?favorited=jane",
 							"host": [
@@ -1218,10 +1176,6 @@
 								"value": "Token {{token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/articles?favorited=jane",
 							"host": [
@@ -1289,10 +1243,6 @@
 								"value": "Token {{token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/articles/{{slug}}",
 							"host": [
@@ -1367,10 +1317,6 @@
 								"value": "Token {{token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/articles?tag=dragons",
 							"host": [
@@ -1707,10 +1653,6 @@
 								"value": "Token {{token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/articles/{{slug}}/comments",
 							"host": [
@@ -1819,7 +1761,8 @@
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Profiles",
@@ -1925,10 +1868,6 @@
 								"value": "Token {{token}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/profiles/celeb_{{USERNAME}}",
 							"host": [
@@ -2074,7 +2013,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Tags",
@@ -2114,10 +2054,6 @@
 								"value": "XMLHttpRequest"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{APIURL}}/tags",
 							"host": [
@@ -2130,7 +2066,57 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		}
-	]
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "a09c3911-dd7e-41b4-b73e-1196affc289e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "1f09b02d-1f3e-4ea8-90d6-8f54ebce3503",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "0c7933a0-3e9d-4574-a9ac-5ade5875a38d",
+			"key": "APIURL",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "795eafa0-eeda-4ccc-907b-9a7b35d4f102",
+			"key": "USERNAME",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "51a3b531-9902-471b-8dd1-0fe743d516d6",
+			"key": "EMAIL",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "8cb44a8f-8fad-4bc3-ac59-1eaebc1a5841",
+			"key": "PASSWORD",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
 }
