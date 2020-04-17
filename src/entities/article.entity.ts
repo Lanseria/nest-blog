@@ -66,11 +66,14 @@ export class ArticleEntity extends AbstractEntity {
   toJSON() {
     return classToPlain(this)
   }
-
-  toArticle(user: UserEntity) {
+  /**
+   * 转换为文章JSON
+   * @param user 判断验证自己是否关注此人(传入一个用户)
+   */
+  toArticle(user?: UserEntity) {
     let favorited = null
     if (user) {
-      favorited = this.favoritedBy.includes(user)
+      favorited = this.favoritedBy.map(u => u.id).includes(user.id)
     }
     const article: any = this.toJSON()
     delete article.favoritedBy

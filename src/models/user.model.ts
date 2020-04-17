@@ -30,6 +30,20 @@ export class UpdateUserDTO {
   @IsOptional()
   bio: string
 }
+export interface UserVO {
+  id: number
+  username: string
+  bio: string
+  image: string
+}
+export interface UserProfileVO extends UserVO {
+  following: boolean
+}
+
+export interface UserLoginVO {
+  email: string
+  token: string
+}
 
 export interface AuthPayload {
   username: string

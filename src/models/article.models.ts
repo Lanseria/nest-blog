@@ -1,4 +1,5 @@
 import { IsString, IsArray, IsOptional } from 'class-validator';
+import { UserProfileVO } from './user.model';
 
 export class CreateArticleDTO {
 
@@ -33,4 +34,27 @@ export class UpdateArticleDTO {
   @IsArray()
   @IsString({ each: true })
   tagList: string[]
+}
+
+export interface ArticleVO {
+  slug: string
+  title: string
+  description: string
+  body: string
+  tagList: string[]
+  createdAt: Date
+  updatedAt: Date
+  favorited: boolean
+  favoritesCount: number
+  author: UserProfileVO
+}
+
+export interface FindFeedQuery {
+  limit?: number
+  offset?: number
+}
+export interface FindAllQuery extends FindFeedQuery {
+  tag?: string
+  author?: string
+  favorited?: string
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
+import { UserProfileVO } from 'src/models/user.model';
 
 @Injectable()
 export class UserService {
@@ -9,7 +10,7 @@ export class UserService {
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>
   ) { }
 
-  async findByUsername(username: string, currentUser?: UserEntity): Promise<UserEntity> {
+  async findByUsername(username: string, currentUser?: UserEntity): Promise<UserProfileVO> {
     const user = await this.userRepo.findOne({
       where: { username },
       relations: ['followers']
