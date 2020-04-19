@@ -1,8 +1,10 @@
 import slugify from 'slugify';
 import { classToPlain } from 'class-transformer';
-import { Entity, Column, BeforeInsert, ManyToOne, ManyToMany, JoinTable, RelationCount } from 'typeorm';
+import { Entity, Column, BeforeInsert, ManyToOne, ManyToMany, JoinTable, RelationCount, OneToMany } from 'typeorm';
+
 import { AbstractEntity } from './abstract-entity';
 import { UserEntity } from './user.entity';
+import { CommentEntity } from './comment.entity';
 
 @Entity("article")
 export class ArticleEntity extends AbstractEntity {
@@ -53,6 +55,13 @@ export class ArticleEntity extends AbstractEntity {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   @ManyToOne(type => UserEntity, user => user.articles, { eager: true })
   author: UserEntity;
+  @OneToMany(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    type => CommentEntity,
+    comment => comment.article,
+    { eager: true }
+  )
+  comments: CommentEntity;
   /**
    * 插入文章前生成slug
    */

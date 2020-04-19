@@ -2,9 +2,11 @@ import { Entity, Column, BeforeInsert, JoinTable, ManyToMany, OneToMany } from "
 import * as bcrypt from 'bcryptjs'
 import { Exclude, classToPlain } from 'class-transformer'
 import { IsEmail } from 'class-validator'
+
 import { AbstractEntity } from "./abstract-entity";
 import { ArticleEntity } from "./article.entity";
 import { UserProfileVO } from "src/models/user.model";
+import { CommentEntity } from "./comment.entity";
 
 @Entity('user')
 export class UserEntity extends AbstractEntity {
@@ -44,6 +46,15 @@ export class UserEntity extends AbstractEntity {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   @OneToMany(type => ArticleEntity, article => article.author)
   articles: ArticleEntity[];
+  /**
+   * TA的评论
+   */
+  @OneToMany(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    type => CommentEntity,
+    comment => comment.author,
+  )
+  comments: Comment[]
   /**
    * TA喜欢的文章
    */

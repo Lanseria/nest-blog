@@ -1,8 +1,9 @@
 import { Controller, Get, Param, NotFoundException, Post, Delete, UseGuards, HttpCode } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
 import { UserService } from './user.service';
 import { User } from 'src/auth/user.decorator';
 import { UserEntity } from 'src/entities/user.entity';
-import { AuthGuard } from '@nestjs/passport';
 import { OptionalAuthGuard } from 'src/auth/optional-auth.guard';
 
 @Controller('profiles')

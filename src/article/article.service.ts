@@ -1,16 +1,30 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindManyOptions, Like, FindConditions, ObjectLiteral } from 'typeorm';
+
 import { ArticleEntity } from 'src/entities/article.entity';
 import { UserEntity } from 'src/entities/user.entity';
-import { CreateArticleDTO, UpdateArticleDTO, FindAllQuery, FindFeedQuery } from 'src/models/article.models';
+import { CreateArticleDTO, UpdateArticleDTO, FindAllQuery, FindFeedQuery } from 'src/models/article.model';
+import { TagEntity } from 'src/entities/tag.entity';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectRepository(ArticleEntity) private articleRepo: Repository<ArticleEntity>,
-    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>
+    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
+    @InjectRepository(TagEntity) private tagRepo: Repository<TagEntity>
   ) { }
+
+  private async upsertTags(tagList: string[]) {
+    const tags = tagList.map(t => ({ tag: t }))
+    const foundTags = await this.tagRepo.find({
+      where: tags
+    })
+    const newTagList = tagList.filter(t => !foundTags.map(t => t.tag).includes(t))
+    await Promise.all(
+      this.tagRepo.create(newTagList.map(t => ({ tag: t }))).map(t => t.save())
+    )
+  }
   /**
    * 通过ID获取文章
    * @param id 文章ID
@@ -91,10 +105,12 @@ export class ArticleService {
    * @param data 传入DTO
    */
   async createArticle(user: UserEntity, data: CreateArticleDTO) {
-    const article = await this.articleRepo.create(data)
-    article.author = user
-    await article.save()
-    return await this.findById(article.id)
+    const articleDTO = await this.articleRepo.create(data)
+    articleDTO.author = user
+    const { id } = await articleDTO.save()
+    const article = await this.findById(id)
+    await this.upsertTags(article.tagList)
+    return article
   }
   /**
    * 修改文章

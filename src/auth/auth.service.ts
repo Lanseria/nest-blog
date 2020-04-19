@@ -1,9 +1,10 @@
 import { Injectable, InternalServerErrorException, UnauthorizedException, ConflictException } from '@nestjs/common';
-import { LoginDTO, RegisterDTO, UpdateUserDTO } from 'src/models/user.model';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+
+import { UserEntity } from 'src/entities/user.entity';
+import { LoginDTO, RegisterDTO, UpdateUserDTO } from 'src/models/user.model';
 
 @Injectable()
 export class AuthService {

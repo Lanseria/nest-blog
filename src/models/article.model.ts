@@ -1,4 +1,5 @@
 import { IsString, IsArray, IsOptional } from 'class-validator';
+
 import { UserProfileVO } from './user.model';
 
 export class CreateArticleDTO {
