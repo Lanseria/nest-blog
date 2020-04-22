@@ -5,6 +5,7 @@ import {
   MaxLength,
   IsOptional,
 } from 'class-validator';
+import { UserEntity } from 'src/entities/user.entity';
 
 export class LoginDTO {
   @IsString()
@@ -35,13 +36,13 @@ export class UpdateUserDTO {
   @IsOptional()
   bio: string;
 }
-export interface UserVO {
+export interface UserResponse extends Partial<UserEntity> {
   id: number;
   username: string;
   bio: string;
   image: string;
 }
-export interface UserProfileVO extends UserVO {
+export interface UserProfileResponse extends UserResponse {
   following: boolean;
 }
 
@@ -52,4 +53,8 @@ export interface UserLoginVO {
 
 export interface AuthPayload {
   username: string;
+}
+
+export interface AuthResponse extends UserResponse {
+  token: string;
 }

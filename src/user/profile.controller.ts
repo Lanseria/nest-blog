@@ -14,6 +14,8 @@ import { UserService } from './user.service';
 import { User } from 'src/auth/user.decorator';
 import { UserEntity } from 'src/entities/user.entity';
 import { OptionalAuthGuard } from 'src/auth/optional-auth.guard';
+import { ResponseObject } from 'src/models/response.model';
+import { UserProfileResponse } from 'src/models/user.model';
 
 @Controller('profiles')
 export class ProfileController {
@@ -24,7 +26,7 @@ export class ProfileController {
   async findProfile(
     @Param('username') username: string,
     @User() user: UserEntity,
-  ) {
+  ): Promise<ResponseObject<'profile', UserProfileResponse>> {
     const profile = await this.userService.findByUsername(username, user);
     if (!profile) {
       throw new NotFoundException();
@@ -38,7 +40,7 @@ export class ProfileController {
   async followUser(
     @User() user: UserEntity,
     @Param('username') username: string,
-  ) {
+  ): Promise<ResponseObject<'profile', UserProfileResponse>> {
     const profile = await this.userService.followUser(user, username);
     return { profile };
   }
@@ -48,7 +50,7 @@ export class ProfileController {
   async unfollowUser(
     @User() user: UserEntity,
     @Param('username') username: string,
-  ) {
+  ): Promise<ResponseObject<'profile', UserProfileResponse>> {
     const profile = await this.userService.unfollowUser(user, username);
     return { profile };
   }

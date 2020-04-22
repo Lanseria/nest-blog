@@ -12,7 +12,7 @@ import { IsEmail } from 'class-validator';
 
 import { AbstractEntity } from './abstract-entity';
 import { ArticleEntity } from './article.entity';
-import { UserProfileVO } from 'src/models/user.model';
+import { UserProfileResponse } from 'src/models/user.model';
 import { CommentEntity } from './comment.entity';
 
 @Entity('user')
@@ -119,7 +119,7 @@ export class UserEntity extends AbstractEntity {
    * 转换为个人资料JSON
    * @param user 判断验证自己是否关注此人(传入一个用户)
    */
-  toProfile(user?: UserEntity): UserProfileVO {
+  toProfile(user?: UserEntity): UserProfileResponse {
     let following = null;
     if (user) {
       following = this.followers.map(u => u.id).includes(user.id);

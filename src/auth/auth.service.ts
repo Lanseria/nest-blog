@@ -9,7 +9,12 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 
 import { UserEntity } from 'src/entities/user.entity';
-import { LoginDTO, RegisterDTO, UpdateUserDTO } from 'src/models/user.model';
+import {
+  LoginDTO,
+  RegisterDTO,
+  UpdateUserDTO,
+  AuthResponse,
+} from 'src/models/user.model';
 
 @Injectable()
 export class AuthService {
@@ -22,12 +27,7 @@ export class AuthService {
     try {
       const user = this.userRepo.create(credentials);
       await user.save();
-      const payload = { username: user.username };
-      const token = this.jwtService.sign(payload);
-      return {
-        ...user.toJSON(),
-        token,
-      };
+      return await this.findCurrentUser(user.username);
     } catch (error) {
       if (error.code === '23505') {
         throw new ConflictException('Username has already been taken');
@@ -43,18 +43,13 @@ export class AuthService {
       if (!isValid) {
         throw new UnauthorizedException('Invalid credentials');
       }
-      const payload = { username: user.username };
-      const token = this.jwtService.sign(payload);
-      return {
-        ...user.toJSON(),
-        token,
-      };
+      return await this.findCurrentUser(user.username);
     } catch (error) {
       throw new UnauthorizedException('Invalid credentials');
     }
   }
 
-  async findCurrentUser(username: string) {
+  async findCurrentUser(username: string): Promise<AuthResponse> {
     const user = await this.userRepo.findOne({ where: { username } });
     const payload = { username: user.username };
     const token = this.jwtService.sign(payload);

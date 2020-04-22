@@ -1,6 +1,6 @@
 import { IsString, IsArray, IsOptional } from 'class-validator';
 
-import { UserProfileVO } from './user.model';
+import { UserProfileResponse } from './user.model';
 
 export class CreateArticleDTO {
   @IsString()
@@ -36,17 +36,17 @@ export class UpdateArticleDTO {
   tagList: string[];
 }
 
-export interface ArticleVO {
+export interface ArticleResponse {
   slug: string;
   title: string;
   description: string;
   body: string;
   tagList: string[];
-  createdAt: Date;
-  updatedAt: Date;
-  favorited: boolean;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  favorited: boolean | null;
   favoritesCount: number;
-  author: UserProfileVO;
+  author: UserProfileResponse;
 }
 
 export interface FindFeedQuery {
