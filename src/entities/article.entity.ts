@@ -1,38 +1,47 @@
 import slugify from 'slugify';
 import { classToPlain } from 'class-transformer';
-import { Entity, Column, BeforeInsert, ManyToOne, ManyToMany, JoinTable, RelationCount, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  BeforeInsert,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+  RelationCount,
+  OneToMany,
+} from 'typeorm';
 
 import { AbstractEntity } from './abstract-entity';
 import { UserEntity } from './user.entity';
 import { CommentEntity } from './comment.entity';
 
-@Entity("article")
+@Entity('article')
 export class ArticleEntity extends AbstractEntity {
   /**
    * slug 可用的链接符号
    */
   @Column()
-  slug: string
+  slug: string;
   /**
    * 标题
    */
   @Column()
-  title: string
+  title: string;
   /**
    * 描述
    */
   @Column()
-  description: string
+  description: string;
   /**
    * 主体
    */
   @Column()
-  body: string
+  body: string;
   /**
    * 标签
    */
   @Column('simple-array')
-  tagList: string[]
+  tagList: string[];
   /**
    * 被喜欢的用户s
    */
@@ -40,26 +49,30 @@ export class ArticleEntity extends AbstractEntity {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     type => UserEntity,
     user => user.favorites,
-    { eager: true }
+    { eager: true },
   )
   @JoinTable()
-  favoritedBy: UserEntity[]
+  favoritedBy: UserEntity[];
   /**
    * 被喜欢的人数
    */
   @RelationCount((article: ArticleEntity) => article.favoritedBy)
-  favoritesCount: number
+  favoritesCount: number;
   /**
    * 作者
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  @ManyToOne(type => UserEntity, user => user.articles, { eager: true })
+  @ManyToOne(
+    type => UserEntity,
+    user => user.articles,
+    { eager: true },
+  )
   author: UserEntity;
   @OneToMany(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     type => CommentEntity,
     comment => comment.article,
-    { eager: true }
+    { eager: true },
   )
   comments: CommentEntity;
   /**
@@ -67,27 +80,28 @@ export class ArticleEntity extends AbstractEntity {
    */
   @BeforeInsert()
   generateSlug() {
-    const slug = slugify(this.title, { lower: true })
-    const random = (Math.random() * Math.pow(36, 6) | 0).toString(36)
-    this.slug = `${slug}-${random}`
+    const slug = slugify(this.title, { lower: true });
+    const random = ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
+    this.slug = `${slug}-${random}`;
   }
 
   toJSON() {
-    return classToPlain(this)
+    return classToPlain(this);
   }
   /**
    * 转换为文章JSON
    * @param user 判断验证自己是否关注此人(传入一个用户)
    */
   toArticle(user?: UserEntity) {
-    let favorited = null
+    let favorited = null;
     if (user) {
-      favorited = this.favoritedBy.map(u => u.id).includes(user.id)
+      favorited = this.favoritedBy.map(u => u.id).includes(user.id);
     }
-    const article: any = this.toJSON()
-    delete article.favoritedBy
+    const article: any = this.toJSON();
+    delete article.favoritedBy;
     return {
-      ...article, favorited
-    }
+      ...article,
+      favorited,
+    };
   }
 }

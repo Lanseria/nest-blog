@@ -12,10 +12,15 @@ import { TagEntity } from 'src/entities/tag.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ArticleEntity, UserEntity, CommentEntity, TagEntity]),
-    AuthModule
+    TypeOrmModule.forFeature([
+      ArticleEntity,
+      UserEntity,
+      CommentEntity,
+      TagEntity,
+    ]),
+    AuthModule,
   ],
   providers: [ArticleService, CommentService],
-  controllers: [ArticleController]
+  controllers: [ArticleController],
 })
-export class ArticleModule { }
+export class ArticleModule {}

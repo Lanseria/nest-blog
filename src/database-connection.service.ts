@@ -13,7 +13,7 @@ export class BatabaseConnectionService implements TypeOrmOptionsFactory {
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_DB,
       synchronize: true,
-      dropSchema: true,// 每次更新代码(开发环境)就更新数据删除原有数据
+      dropSchema: true, // 每次更新代码(开发环境)就更新数据删除原有数据
       logging: true,
       entities: ['dist/**/*.entity.js'],
     };

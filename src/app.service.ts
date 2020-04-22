@@ -6,17 +6,16 @@ import { TagEntity } from './entities/tag.entity';
 
 @Injectable()
 export class AppService {
-
   constructor(
-    @InjectRepository(TagEntity) private tagRepo: Repository<TagEntity>
-  ) { }
+    @InjectRepository(TagEntity) private tagRepo: Repository<TagEntity>,
+  ) {}
 
   getHello(): string {
     return 'Hello World!';
   }
 
   async findAllTags() {
-    const tags = await this.tagRepo.find()
-    return tags.map(t => t.toJSON())
+    const tags = await this.tagRepo.find();
+    return tags.map(t => t.toJSON());
   }
 }

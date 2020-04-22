@@ -3,59 +3,58 @@ import { IsString, IsArray, IsOptional } from 'class-validator';
 import { UserProfileVO } from './user.model';
 
 export class CreateArticleDTO {
+  @IsString()
+  title: string;
 
   @IsString()
-  title: string
+  body: string;
 
   @IsString()
-  body: string
-
-  @IsString()
-  description: string
+  description: string;
 
   @IsArray()
   @IsString({ each: true })
-  tagList: string[]
+  tagList: string[];
 }
 
 export class UpdateArticleDTO {
   @IsOptional()
   @IsString()
-  title: string
+  title: string;
 
   @IsOptional()
   @IsString()
-  body: string
+  body: string;
 
   @IsOptional()
   @IsString()
-  description: string
+  description: string;
 
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  tagList: string[]
+  tagList: string[];
 }
 
 export interface ArticleVO {
-  slug: string
-  title: string
-  description: string
-  body: string
-  tagList: string[]
-  createdAt: Date
-  updatedAt: Date
-  favorited: boolean
-  favoritesCount: number
-  author: UserProfileVO
+  slug: string;
+  title: string;
+  description: string;
+  body: string;
+  tagList: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  favorited: boolean;
+  favoritesCount: number;
+  author: UserProfileVO;
 }
 
 export interface FindFeedQuery {
-  limit?: number
-  offset?: number
+  limit?: number;
+  offset?: number;
 }
 export interface FindAllQuery extends FindFeedQuery {
-  tag?: string
-  author?: string
-  favorited?: string
+  tag?: string;
+  author?: string;
+  favorited?: string;
 }

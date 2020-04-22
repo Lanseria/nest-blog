@@ -1,7 +1,24 @@
-import { Controller, Get, Param, Post, UseGuards, Body, ValidationPipe, Put, Delete, Query, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+  Body,
+  ValidationPipe,
+  Put,
+  Delete,
+  Query,
+  HttpCode,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
-import { CreateArticleDTO, UpdateArticleDTO, FindAllQuery, FindFeedQuery } from 'src/models/article.model';
+import {
+  CreateArticleDTO,
+  UpdateArticleDTO,
+  FindAllQuery,
+  FindFeedQuery,
+} from 'src/models/article.model';
 import { ArticleService } from './article.service';
 import { CommentService } from './comment.service';
 import { User } from 'src/auth/user.decorator';
@@ -13,8 +30,8 @@ import { CreateCommentDTO } from 'src/models/comment.model';
 export class ArticleController {
   constructor(
     private articleService: ArticleService,
-    private commentService: CommentService
-  ) { }
+    private commentService: CommentService,
+  ) {}
   /**
    * 获取所有文章
    * @param user 当前用户
@@ -23,8 +40,8 @@ export class ArticleController {
   @Get()
   @UseGuards(new OptionalAuthGuard())
   async findAll(@User() user: UserEntity, @Query() query: FindAllQuery) {
-    const articles = await this.articleService.findAll(user, query)
-    return { articles, articlesCount: articles.length }
+    const articles = await this.articleService.findAll(user, query);
+    return { articles, articlesCount: articles.length };
   }
   /**
    * 获取所有自己所关注的人的文章
@@ -34,8 +51,8 @@ export class ArticleController {
   @Get('/feed')
   @UseGuards(AuthGuard())
   async findFeed(@User() user: UserEntity, @Query() query: FindFeedQuery) {
-    const articles = await this.articleService.findFeed(user, query)
-    return { articles, articlesCount: articles.length }
+    const articles = await this.articleService.findFeed(user, query);
+    return { articles, articlesCount: articles.length };
   }
   /**
    * 通过slug获取文章
@@ -44,12 +61,9 @@ export class ArticleController {
    */
   @Get('/:slug')
   @UseGuards(new OptionalAuthGuard())
-  async findBySlug(
-    @Param('slug') slug: string,
-    @User() user: UserEntity
-  ) {
-    const article = await this.articleService.findBySlug(slug)
-    return { article: article.toArticle(user) }
+  async findBySlug(@Param('slug') slug: string, @User() user: UserEntity) {
+    const article = await this.articleService.findBySlug(slug);
+    return { article: article.toArticle(user) };
   }
   /**
    * 创建文章
@@ -60,10 +74,10 @@ export class ArticleController {
   @UseGuards(AuthGuard())
   async createArticle(
     @User() user: UserEntity,
-    @Body('article', ValidationPipe) data: CreateArticleDTO
+    @Body('article', ValidationPipe) data: CreateArticleDTO,
   ) {
-    const article = await this.articleService.createArticle(user, data)
-    return { article: article.toArticle(user) }
+    const article = await this.articleService.createArticle(user, data);
+    return { article: article.toArticle(user) };
   }
   /**
    * 修改文章
@@ -76,10 +90,10 @@ export class ArticleController {
   async updateArticle(
     @Param('slug') slug: string,
     @User() user: UserEntity,
-    @Body('article', ValidationPipe) data: UpdateArticleDTO
+    @Body('article', ValidationPipe) data: UpdateArticleDTO,
   ) {
-    const article = await this.articleService.updateArticle(slug, user, data)
-    return { article: article.toArticle(user) }
+    const article = await this.articleService.updateArticle(slug, user, data);
+    return { article: article.toArticle(user) };
   }
   /**
    * 删除文章
@@ -88,11 +102,8 @@ export class ArticleController {
    */
   @Delete('/:slug')
   @UseGuards(AuthGuard())
-  async deleteArticle(
-    @Param('slug') slug: string,
-    @User() user: UserEntity
-  ) {
-    await this.articleService.deleteArticle(slug, user)
+  async deleteArticle(@Param('slug') slug: string, @User() user: UserEntity) {
+    await this.articleService.deleteArticle(slug, user);
   }
   /**
    * 喜欢此文章
@@ -102,13 +113,10 @@ export class ArticleController {
   @Post('/:slug/favorite')
   @HttpCode(200)
   @UseGuards(AuthGuard())
-  async favoriteArticle(
-    @Param('slug') slug: string,
-    @User() user: UserEntity
-  ) {
-    const article = await this.articleService.favoriteArticle(slug, user)
-    console.log(article.toArticle(user))
-    return { article: article.toArticle(user) }
+  async favoriteArticle(@Param('slug') slug: string, @User() user: UserEntity) {
+    const article = await this.articleService.favoriteArticle(slug, user);
+    console.log(article.toArticle(user));
+    return { article: article.toArticle(user) };
   }
   /**
    * 取消喜欢此文章
@@ -118,19 +126,17 @@ export class ArticleController {
   @UseGuards(AuthGuard())
   async unfavoriteArticle(
     @Param('slug') slug: string,
-    @User() user: UserEntity
+    @User() user: UserEntity,
   ) {
-    const article = await this.articleService.unfavoriteArticle(slug, user)
-    console.log(article.toArticle(user))
-    return { article: article.toArticle(user) }
+    const article = await this.articleService.unfavoriteArticle(slug, user);
+    console.log(article.toArticle(user));
+    return { article: article.toArticle(user) };
   }
 
   @Get('/:slug/comments')
-  async findAllByArticleSlug(
-    @Param('slug') slug: string
-  ) {
-    const comments = await this.commentService.findAllByArticleSlug(slug)
-    return { comments }
+  async findAllByArticleSlug(@Param('slug') slug: string) {
+    const comments = await this.commentService.findAllByArticleSlug(slug);
+    return { comments };
   }
 
   @Post('/:slug/comments')
@@ -138,10 +144,10 @@ export class ArticleController {
   async createComment(
     @Param('slug') slug: string,
     @User() user: UserEntity,
-    @Body('comment', ValidationPipe) data: CreateCommentDTO
+    @Body('comment', ValidationPipe) data: CreateCommentDTO,
   ) {
-    const comment = await this.commentService.createComment(slug, user, data)
-    return { comment }
+    const comment = await this.commentService.createComment(slug, user, data);
+    return { comment };
   }
 
   @Delete('/:slug/comments/:id')
@@ -149,9 +155,9 @@ export class ArticleController {
   async deleteComment(
     @Param('slug') slug: string,
     @Param('id') id: number,
-    @User() user: UserEntity
+    @User() user: UserEntity,
   ) {
-    const comment = await this.commentService.deleteComment(id, user)
-    return comment
+    const comment = await this.commentService.deleteComment(id, user);
+    return comment;
   }
 }
