@@ -12,6 +12,11 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 import {
   CreateArticleDTO,
@@ -58,6 +63,7 @@ export class ArticleController {
    */
   @Get('/feed')
   @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   async findFeed(
     @User() user: UserEntity,
     @Query() query: FindFeedQuery,
@@ -117,6 +123,9 @@ export class ArticleController {
    * @param slug 文章slug
    * @param user 当前用户
    */
+  @ApiBearerAuth()
+  @ApiOkResponse({ description: '删除此文章' })
+  @ApiUnauthorizedResponse()
   @Delete('/:slug')
   @UseGuards(AuthGuard())
   async deleteArticle(@Param('slug') slug: string, @User() user: UserEntity) {
@@ -127,6 +136,9 @@ export class ArticleController {
    * @param slug 文章slug
    * @param user 当前用户
    */
+  @ApiBearerAuth()
+  @ApiOkResponse({ description: '喜欢此文章' })
+  @ApiUnauthorizedResponse()
   @Post('/:slug/favorite')
   @HttpCode(200)
   @UseGuards(AuthGuard())
@@ -135,13 +147,16 @@ export class ArticleController {
     @User() user: UserEntity,
   ): Promise<ResponseObject<'article', ArticleResponse>> {
     const article = await this.articleService.favoriteArticle(slug, user);
-    console.log(article.toArticle(user));
     return { article: article.toArticle(user) };
   }
+
   /**
    * 取消喜欢此文章
    * @param user 当前用户
    */
+  @ApiBearerAuth()
+  @ApiOkResponse({ description: '不喜欢此文章' })
+  @ApiUnauthorizedResponse()
   @Delete('/:slug/favorite')
   @UseGuards(AuthGuard())
   async unfavoriteArticle(
@@ -149,10 +164,15 @@ export class ArticleController {
     @User() user: UserEntity,
   ): Promise<ResponseObject<'article', ArticleResponse>> {
     const article = await this.articleService.unfavoriteArticle(slug, user);
-    console.log(article.toArticle(user));
     return { article: article.toArticle(user) };
   }
-
+  /**
+   * 查询评论
+   * @param slug 文章slug
+   */
+  @ApiBearerAuth()
+  @ApiOkResponse({ description: '此文章下的评论' })
+  @ApiUnauthorizedResponse()
   @Get('/:slug/comments')
   async findAllByArticleSlug(
     @Param('slug') slug: string,
@@ -160,7 +180,15 @@ export class ArticleController {
     const comments = await this.commentService.findAllByArticleSlug(slug);
     return { comments };
   }
-
+  /**
+   * 做评论
+   * @param slug 文章slug
+   * @param user 当前用户
+   * @param data 评论数据
+   */
+  @ApiBearerAuth()
+  @ApiOkResponse({ description: '评论' })
+  @ApiUnauthorizedResponse()
   @Post('/:slug/comments')
   @UseGuards(AuthGuard())
   async createComment(
@@ -171,7 +199,14 @@ export class ArticleController {
     const comment = await this.commentService.createComment(slug, user, data);
     return { comment };
   }
-
+  /**
+   * 删除评论
+   * @param id 评论ID
+   * @param user 当前用户
+   */
+  @ApiBearerAuth()
+  @ApiOkResponse({ description: '删除评论' })
+  @ApiUnauthorizedResponse()
   @Delete('/:slug/comments/:id')
   @UseGuards(AuthGuard())
   async deleteComment(
