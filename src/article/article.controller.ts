@@ -16,6 +16,7 @@ import {
   ApiBearerAuth,
   ApiOkResponse,
   ApiUnauthorizedResponse,
+  ApiBody,
 } from '@nestjs/swagger';
 
 import {
@@ -24,13 +25,19 @@ import {
   FindAllQuery,
   FindFeedQuery,
   ArticleResponse,
+  CreateArticleBody,
+  UpdateArticleBody,
 } from 'src/models/article.model';
 import { ArticleService } from './article.service';
 import { CommentService } from './comment.service';
 import { User } from 'src/auth/user.decorator';
 import { UserEntity } from 'src/entities/user.entity';
 import { OptionalAuthGuard } from 'src/auth/optional-auth.guard';
-import { CreateCommentDTO, CommentResponse } from 'src/models/comment.model';
+import {
+  CreateCommentDTO,
+  CommentResponse,
+  CreateCommentBody,
+} from 'src/models/comment.model';
 import { ResponseObject } from 'src/models/response.model';
 
 @Controller('articles')
@@ -93,6 +100,9 @@ export class ArticleController {
    * @param user 当前用户
    * @param data 传入文章DTO
    */
+  @ApiBearerAuth()
+  @ApiOkResponse({ description: '创建文章' })
+  @ApiBody({ type: CreateArticleBody })
   @Post()
   @UseGuards(AuthGuard())
   async createArticle(
@@ -108,6 +118,9 @@ export class ArticleController {
    * @param user 当前用户
    * @param data 传入文章DTO
    */
+  @ApiBearerAuth()
+  @ApiOkResponse({ description: '修改文章' })
+  @ApiBody({ type: UpdateArticleBody })
   @Put('/:slug')
   @UseGuards(AuthGuard())
   async updateArticle(
@@ -170,7 +183,6 @@ export class ArticleController {
    * 查询评论
    * @param slug 文章slug
    */
-  @ApiBearerAuth()
   @ApiOkResponse({ description: '此文章下的评论' })
   @ApiUnauthorizedResponse()
   @Get('/:slug/comments')
@@ -189,6 +201,7 @@ export class ArticleController {
   @ApiBearerAuth()
   @ApiOkResponse({ description: '评论' })
   @ApiUnauthorizedResponse()
+  @ApiBody({ type: CreateCommentBody })
   @Post('/:slug/comments')
   @UseGuards(AuthGuard())
   async createComment(

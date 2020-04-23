@@ -16,11 +16,17 @@ import { UserEntity } from 'src/entities/user.entity';
 import { OptionalAuthGuard } from 'src/auth/optional-auth.guard';
 import { ResponseObject } from 'src/models/response.model';
 import { UserProfileResponse } from 'src/models/user.model';
+import {
+  ApiOkResponse,
+  ApiUnauthorizedResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 @Controller('profiles')
 export class ProfileController {
   constructor(private userService: UserService) {}
 
+  @ApiOkResponse({ description: '通过用户名查询用户' })
   @Get('/:username')
   @UseGuards(new OptionalAuthGuard())
   async findProfile(
@@ -34,6 +40,9 @@ export class ProfileController {
     return { profile };
   }
 
+  @ApiBearerAuth()
+  @ApiOkResponse({ description: '关注某用户' })
+  @ApiUnauthorizedResponse({ description: '凭证无效' })
   @Post('/:username/follow')
   @HttpCode(200)
   @UseGuards(AuthGuard())
@@ -45,6 +54,9 @@ export class ProfileController {
     return { profile };
   }
 
+  @ApiBearerAuth()
+  @ApiOkResponse({ description: '取关某用户' })
+  @ApiUnauthorizedResponse({ description: '凭证无效' })
   @Delete('/:username/follow')
   @UseGuards(AuthGuard())
   async unfollowUser(

@@ -12,7 +12,7 @@ async function bootstrap() {
     .setTitle('Nest-Blog API Document')
     .setDescription('The nest-blog API description')
     .setVersion('1.0.0')
-    .addTag('blog')
+    // .addTag('blog')
     .addBearerAuth(
       {
         type: 'http',

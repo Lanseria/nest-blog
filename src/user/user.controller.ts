@@ -7,10 +7,20 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiUnauthorizedResponse,
+  ApiBody,
+} from '@nestjs/swagger';
 
 import { User } from 'src/auth/user.decorator';
 import { UserEntity } from 'src/entities/user.entity';
-import { UpdateUserDTO, UserResponse } from 'src/models/user.model';
+import {
+  UpdateUserDTO,
+  UserResponse,
+  UpdateUserBody,
+} from 'src/models/user.model';
 import { AuthService } from 'src/auth/auth.service';
 import { ResponseObject } from 'src/models/response.model';
 
@@ -18,6 +28,9 @@ import { ResponseObject } from 'src/models/response.model';
 export class UserController {
   constructor(private authService: AuthService) {}
 
+  @ApiBearerAuth()
+  @ApiOkResponse({ description: '获取自己的信息' })
+  @ApiUnauthorizedResponse({ description: '凭证无效' })
   @Get()
   @UseGuards(AuthGuard())
   async findCurrentUser(
@@ -27,6 +40,10 @@ export class UserController {
     return { user };
   }
 
+  @ApiBearerAuth()
+  @ApiOkResponse({ description: '修改自己的信息' })
+  @ApiUnauthorizedResponse({ description: '凭证无效' })
+  @ApiBody({ type: UpdateUserBody })
   @Put()
   @UseGuards(AuthGuard())
   async update(

@@ -26,6 +26,10 @@ export class LoginDTO {
   })
   email: string;
 }
+export class LoginBody {
+  @ApiProperty()
+  user: LoginDTO;
+}
 
 export class RegisterDTO extends LoginDTO {
   @IsString()
@@ -36,6 +40,11 @@ export class RegisterDTO extends LoginDTO {
     description: 'username',
   })
   username: string;
+}
+
+export class RegisterBody {
+  @ApiProperty()
+  user: RegisterDTO;
 }
 
 export class UpdateUserDTO {
@@ -49,6 +58,12 @@ export class UpdateUserDTO {
   @IsOptional()
   bio: string;
 }
+
+export class UpdateUserBody {
+  @ApiProperty()
+  user: UpdateUserDTO;
+}
+
 export interface UserResponse extends Partial<UserEntity> {
   id?: number;
   username?: string;
